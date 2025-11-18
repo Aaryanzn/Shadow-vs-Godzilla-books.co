@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shadow vs Godzilla books.co – Services</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
+  <style>
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.1);
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(255,255,255,0.2);
+      border-radius: 6px;
+      border: 3px solid transparent;
+      background-clip: content-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(255,255,255,0.3);
+    }
+    body {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.2) rgba(255,255,255,0.1);
+    }
+
+    /* Spotlight background */
+    :root {
+      --spot-x: 50vw;
+      --spot-y: 50vh;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow: auto;
+      background: radial-gradient(circle at var(--spot-x) var(--spot-y), #222 0%, #000 85%);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.7) 100%);
+      z-index: 2;
+    }
+
+    /* Meteor canvas */
+    #meteors {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAVBAR */
+    nav {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:20px 50px;
+      background:#111;
+      position: relative;
+      z-index: 10;
+    }
+    .nav-brand h4 {
+      color:#ffcb63;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      font-size:20px;
+    }
+    .nav-links {
+      display:flex;
+      gap:20px;
+      list-style:none;
+    }
+    .nav-links a,
+    .dropdown-toggle {
+      color:#ccc;
+      text-decoration:none;
+      padding:10px 15px;
+      background:none;
+      border:none;
+      font-weight:bold;
+      cursor:pointer;
+      transition:background 0.3s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active,
+    .dropdown-toggle:hover {
+      background:#ef9f00;
+      color:#fff;
+    }
+    .dropdown {
+  position: relative;
+}
+.dropdown-toggle {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-weight: bold;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.dropdown-toggle:hover {
+  background: #ef9f00;
+  color: #fff;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #222;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 180px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  display: none;
+  z-index: 10;
+}
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+.dropdown-menu li a {
+  display: block;
+  padding: 10px 15px;
+  color: #ccc;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+.dropdown-menu li a:hover {
+  background: #444;
+  color: #fff;
+}
+
+
+    /* Services section */
+    .services-section {
+      padding: 6rem 2rem 2rem;
+      position: relative;
+      z-index: 3;
+      text-align: center;
+    }
+    .services-section h1 {
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+    }
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .service-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .service-card img {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 1rem;
+    }
+    .service-card h3 {
+      margin: 0.5rem 0;
+      font-size: 1.25rem;
+    }
+    .service-card p {
+      flex: 1;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 1.5rem;
+    }
+    .service-card button {
+      background: #4caf50;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .service-card button:hover {
+      background: #43a047;
+    }
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.6);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      color: #fff;
+      position: relative;
+      text-align: left;
+    }
+    .modal-content h2 {
+      margin-top: 0;
+      font-size: 1.75rem;
+    }
+    .modal-content .close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .modal-content img {
+      width: 48px;
+      height: 48px;
+      float: left;
+      margin-right: 1rem;
+    }
+    .modal-content p {
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Meteor canvas -->
+<canvas id="meteors"></canvas>
+
+<!-- NAVBAR -->
+<nav>
+  <ul class="nav-links">
+ <li><a href="Shadow vs Godzilla books.co.html">Home</a></li>
+    <li><a href="Shadow vs Godzilla.co books.html">Books</a></li>
+    <li><a href="Shadow vs Godzilla.co services.html"  class="active">Services</a></li>
+    <li><a href="Shadow vs Godzilla.co contact.html">Contact</a></li>
+    <li class="dropdown">
+      <button class="dropdown-toggle">More ▼</button>
+      <ul class="dropdown-menu">
+        <li><a href="about.html">About</a></li>
+        <li><a href="why-we-started.html">Why We Started</a></li>
+        <li><a href="sneak-peek.html">A Sneak Peek</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<!-- SERVICES -->
+<section class="services-section">
+  <h1>Our Services</h1>
+  <div class="service-grid">
+    <div class="service-card">
+      <img src="icon-recs.png" alt="Book Recommendations">
+      <h3>Curated Book Lists</h3>
+      <p>Hand-picked reads for every mood and genre—discover hidden gems without hassle.</p>
+      <button class="learn-more" data-target="#modal1">Learn More</button>
+    </div>
+    <div class="service-card">
+      <img src="icon-illustration.png" alt="Illustrations">
+      <h3>Custom Illustrations</h3>
+      <p>Bespoke cover art and interior illustrations crafted by our talented artists.</p>
+      <button class="learn-more" data-target="#modal2">Learn More</button>
+    </div>
+    <div class="service-card">
+      <img src="icon-ebook.png" alt="eBook Formatting">
+      <h3>eBook Formatting</h3>
+      <p>Format your manuscript for every device—MOBI, EPUB, and more—for a seamless read.</p>
+      <button class="learn-more" data-target="#modal3">Learn More</button>
+    </div>
+    <div class="service-card">
+      <img src="icon-workshop.png" alt="Workshops">
+      <h3>Author Workshops</h3>
+      <p>Interactive sessions to sharpen your writing, publishing, and marketing skills.</p>
+      <button class="learn-more" data-target="#modal4">Learn More</button>
+    </div>
+  </div>
+</section>
+
+<!-- MODALS CONTINUED -->
+<div class="modal" id="modal1">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Curated Book Lists</h2>
+    <img src="icon-recs.png" alt="">
+    <p>Our expert team researches new releases and timeless classics.</p>
+    <p>We tailor each list to your interests—fantasy epics, sci-fi adventures, historical dramas, and more.</p>
+    <p>Receive monthly themed lists or personalized one-off recommendations.</p>
+  </div>
+</div>
+
+<div class="modal" id="modal2">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Custom Illustrations</h2>
+    <img src="icon-illustration.png" alt="">
+    <p>Collaborate with illustrators to design covers that captivate.</p>
+    <p>Choose from watercolor, digital art, or mixed media styles.</p>
+    <p>Turn key scenes into stunning full-page illustrations inside your book.</p>
+  </div>
+</div>
+
+<div class="modal" id="modal3">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>eBook Formatting</h2>
+    <img src="icon-ebook.png" alt="">
+    <p>We convert your manuscript into industry-standard EPUB and MOBI files.</p>
+    <p>Embed images, set up interactive tables of contents, and ensure compatibility across devices.</p>
+    <p>Tested on Kindle, Kobo, Nook, and major e-reading apps.</p>
+  </div>
+</div>
+
+<div class="modal" id="modal4">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Author Workshops</h2>
+    <img src="icon-workshop.png" alt="">
+    <p>Live online workshops led by published authors and industry insiders.</p>
+    <p>Topics: plot structure, character development, self-publishing strategies, marketing tactics.</p>
+    <p>Includes Q&A, worksheets, and one-on-one feedback sessions.</p>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+  // Spotlight follows mouse
+  document.body.addEventListener('mousemove', e => {
+    document.documentElement.style.setProperty('--spot-x', e.clientX + 'px');
+    document.documentElement.style.setProperty('--spot-y', e.clientY + 'px');
+  });
+
+  // Meteor shower animation
+  const canvas = document.getElementById('meteors');
+  const ctx = canvas.getContext('2d');
+  let meteors = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  class Meteor {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * -canvas.height;
+      this.length = Math.random() * 80 + 20;
+      this.speed = Math.random() * 4 + 2;
+      this.angle = Math.PI / 4;
+      this.alpha = Math.random() * 0.5 + 0.3;
+    }
+    update() {
+      this.x += this.speed * Math.cos(this.angle);
+      this.y += this.speed * Math.sin(this.angle);
+      if (this.y > canvas.height || this.x > canvas.width) this.reset();
+    }
+    draw() {
+      ctx.strokeStyle = `rgba(255,255,255,${this.alpha})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(
+        this.x - this.length * Math.cos(this.angle),
+        this.y - this.length * Math.sin(this.angle)
+      );
+      ctx.stroke();
+    }
+  }
+
+  for (let i = 0; i < 60; i++) meteors.push(new Meteor());
+
+  function animateMeteors() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    meteors.forEach(m => {
+      m.update();
+      m.draw();
+    });
+    requestAnimationFrame(animateMeteors);
+  }
+  animateMeteors();
+
+  // Modal open/close logic
+  document.querySelectorAll('.learn-more').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const modal = document.querySelector(btn.dataset.target);
+      modal.classList.add('active');
+    });
+  });
+  document.querySelectorAll('.modal .close').forEach(x => {
+    x.addEventListener('click', () => {
+      x.closest('.modal').classList.remove('active');
+    });
+  });
+  window.addEventListener('click', e => {
+    if (e.target.classList.contains('modal')) {
+      e.target.classList.remove('active');
+    }
+  });
+</script>
+
+<script>
+  const dropdown = document.querySelector('.dropdown');
+  const toggle = dropdown.querySelector('.dropdown-toggle');
+  const menu = dropdown.querySelector('.dropdown-menu');
+
+  toggle.addEventListener('click', e => {
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+
+  document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove('open');
+    }
+  });
+</script>
+
+
+</body>
+</html>

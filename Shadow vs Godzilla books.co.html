@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="Icon" href="sonicvgodzilla.png">
+  <title>Shadow vs Godzilla Books.co – Homepage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 50vw 50vh, #111 0%, #000 85%);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    canvas#sparks {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    nav {
+      background: #000;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      width: 100%;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-brand img {
+      width: 40px;
+      height: 40px;
+      animation: floatMine 3s ease-in-out infinite;
+    }
+
+    .nav-brand h4 {
+      margin: 0;
+      font-size: 20px;
+      color: #ffcb63;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    @keyframes floatMine {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 5px 10px;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: #00ccff;
+    }
+
+    .nav-links a.active {
+      color: #00ccff;
+    }
+
+    .hero-section {
+      position: relative;
+      width: 100%;
+      height: 45vh;
+      overflow: hidden;
+    }
+
+    .hero-section img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(50%);
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 25%;
+      background-color: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      padding: 20px 40px;
+    }
+
+    section {
+      padding: 40px;
+      text-align: center;
+    }
+
+    .carousel-wrapper {
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    .carousel {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 20px;
+      scroll-behavior: smooth;
+      width: max-content;
+    }
+
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .book {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      width: 180px;
+      height: 380px;
+      background: #222;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .book img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .book h3 {
+      font-size: 16px;
+      margin: 10px 0 4px;
+      line-height: 1.2;
+    }
+
+    .book p {
+      font-size: 13px;
+      color: #ccc;
+      line-height: 1.3;
+    }
+
+    .book.highlight {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00ccff;
+    }
+
+    .carousel-buttons {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .carousel-buttons button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 16px;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .carousel-buttons button:hover {
+      background: #005fa3;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #222;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      margin: auto;
+      color: white;
+      box-shadow: 0 0 20px #00ccff;
+      position: relative;
+    }
+
+    .modal-content a {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #00ccff;
+      color: #000;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+.newsletter {
+  background: #111;
+  padding: 30px 20px;
+  text-align: center;
+  color: #fff;
+  border-top: 2px solid #00ccff;
+}
+
+.newsletter h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #00ccff;
+}
+
+.newsletter p {
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.newsletter form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.newsletter input {
+  padding: 10px;
+  width: 250px;
+  border: none;
+  border-radius: 5px;
+}
+
+.newsletter button {
+  padding: 10px 20px;
+  background: #00ccff;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
+  </style>
+</head>
+<body>
+
+<canvas id="sparks"></canvas>
+
+<nav>
+  <div class="nav-container">
+    <div class="nav-brand">
+      <img src="mine-icon.gif" alt="Mining Icon" />
+      <h4>Shadow vs Godzilla Books.co</h4>
+    </div>
+    <ul class="nav-links">
+      <li><a href="Shadow vs Godzilla books.co.html" class="active">Home</a></li>
+      <li><a href="Shadow vs Godzilla.co books.html">Books</a></li>
+      <li><a href="Shadow vs Godzilla.co services.html">Services</a></li>
+      <li><a href="Shadow vs Godzilla.co contact.html">Contact</a></li>
+      <li><a href="#">More</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="hero-section">
+  <img src="background.jpg" alt="Background Image" />
+  <div class="overlay">
+    <h2>Where legends rise from the shadows…</h2>
+  </div>
+</div>
+
+<section>
+  <h2>📚 Browse Our Books</h2>
+  <div class="carousel" id="carousel">
+    <div class="book">
+      <img src="the dark lion book cover.png" alt="The Dark Lion" />
+      <h3>The Dark Lion</h3>
+      <p>Three kids. One map. A lion in the shadows.</p>
+    </div>
+    <div class="book">
+      <img src="Giant fat liar cover page.png" alt="Giant Fat Liar" />
+      <h3>Giant Fat Liar</h3>
+      <p>A tale of exaggeration, chaos, and unexpected truth.</p>
+    </div>
+    <div class="book">
+      <img src="monster-hunters.jpg" alt="Monster Hunters" />
+      <h3>Monster Hunters</h3>
+      <p>They track what others fear. The hunt begins.</p>
+    </div>
+    <div class="book">
+      <img src="space-life.jpg" alt="Space Life" />
+      <h3>Space Life</h3>
+      <p>Survival, discovery, and danger beyond the stars.</p>
+    </div>
+    <div class="book">
+            <img src="danny-friends.jpg" alt="Danny and Friends" />
+      <h3>The Adventures of Danny and His Friends</h3>
+      <p>Friendship, fun, and wild adventures await.</p>
+    </div>
+  </div>
+
+  <div class="carousel-buttons">
+    <button onclick="highlightPrevious()">◀ Previous</button>
+    <button onclick="highlightNext()">Next ▶</button>
+  </div>
+</section>
+
+<!-- Modal -->
+<div id="bookModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="modalTitle"></h2>
+    <p id="modalDescription"></p>
+    <a id="modalLink" href="#" target="_blank">📖 Read Now</a>
+  </div>
+</div>
+
+<script>
+  // Blue lightning sparks effect
+  const canvas = document.getElementById('sparks');
+  const ctx = canvas.getContext('2d');
+  let sparks = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  document.addEventListener('mousemove', e => {
+    for (let i = 0; i < 3; i++) {
+      sparks.push({
+        x: e.clientX,
+        y: e.clientY,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+        life: 60,
+        radius: Math.random() * 2 + 1,
+        color: `rgba(0,${Math.floor(Math.random()*100)+155},255,1)`
+      });
+    }
+  });
+
+  function animateSparks() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    sparks.forEach((spark, index) => {
+      spark.x += spark.vx;
+      spark.y += spark.vy;
+      spark.life -= 1;
+      ctx.beginPath();
+      ctx.arc(spark.x, spark.y, spark.radius, 0, Math.PI * 2);
+      ctx.fillStyle = spark.color;
+      ctx.fill();
+      if (spark.life <= 0) sparks.splice(index, 1);
+    });
+    requestAnimationFrame(animateSparks);
+  }
+  animateSparks();
+
+  // Carousel highlight logic
+  const books = document.querySelectorAll('.book');
+  let currentIndex = 0;
+
+  function updateHighlight() {
+    books.forEach((book, index) => {
+      book.classList.toggle('highlight', index === currentIndex);
+    });
+  }
+
+  function highlightNext() {
+    currentIndex = (currentIndex + 1) % books.length;
+    updateHighlight();
+  }
+
+  function highlightPrevious() {
+    currentIndex = (currentIndex - 1 + books.length) % books.length;
+    updateHighlight();
+  }
+
+  updateHighlight();
+
+  // Modal logic
+  const modal = document.getElementById("bookModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalDescription = document.getElementById("modalDescription");
+  const modalLink = document.getElementById("modalLink");
+  const closeBtn = document.querySelector(".close");
+
+  const bookData = [
+    {
+      title: "The Dark Lion",
+      description: "Three kids. One map. A lion in the shadows.",
+      link: "file:///C:/Users/Aaryan/Desktop/shadow%20and%20godzilla.co/books/The%20dark%20lion/book/the%20dark%20lion%20book%201.pdf"
+    },
+    {
+      title: "Giant Fat Liar",
+      description: "A tale of exaggeration, chaos, and unexpected truth.",
+      link: "file:///C:/Users/Aaryan/Desktop/shadow%20and%20godzilla.co/books/Giant%20Fat%20Liar/book/Giant%20fat%20liar.pdf"
+    },
+    {
+      title: "Monster Hunters",
+      description: "They track what others fear. The hunt begins.",
+      link: "#"
+    },
+    {
+      title: "Space Life",
+      description: "Survival, discovery, and danger beyond the stars.",
+      link: "#"
+    },
+    {
+      title: "The Adventures of Danny and His Friends",
+      description: "Friendship, fun, and wild adventures await.",
+      link: "#"
+    }
+  ];
+
+  books.forEach((book, index) => {
+    book.addEventListener("click", () => {
+      modalTitle.textContent = bookData[index].title;
+      modalDescription.textContent = bookData[index].description;
+      modalLink.href = bookData[index].link;
+      modal.style.display = "flex";
+    });
+  });
+
+  closeBtn.onclick = () => {
+    modal.style.display = "none";
+  };
+
+  window.onclick = (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+</script>
+
+<script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    // keep loader for 3 seconds after page load
+    setTimeout(() => {
+      loader.style.opacity = "0";
+      setTimeout(() => loader.style.display = "none", 800);
+    }, 3000);
+  });
+</script>
+<!-- Welcome Overlay -->
+<div id="welcome">
+  <p>Welcome to Shadow vs Godzilla books.co</p>
+</div>
+
+
+
+<section class="newsletter">
+  <h2>📬 Stay in the Loop</h2>
+  <p>Get updates on new books, secret releases, and epic battles.</p>
+<form action="subscribe.php" method="POST">
+  <input type="email" name="email" placeholder="Enter your email" required />
+  <button type="submit">Sign Up</button>
+</form>
+<!-- Loader -->
+<div id="loader">
+  <div class="pickaxe"></div>
+  <p>Loading...</p>
+</div>
+
+<!-- Welcome Overlay -->
+<div id="welcome">
+  <p>Welcome to Shadow vs Godzilla books.co</p>
+</div>
+
+<!-- Site Content Wrapper (this will blur) -->
+<div id="site-content">
+<style>
+  /* Loader overlay */
+#loader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #00ccff;
+  font-family: Arial, sans-serif;
+  z-index: 9999;
+}
+
+/* Pickaxe animation */
+.pickaxe {
+  width: 60px;
+  height: 60px;
+  background: url('mine-icon.gif') no-repeat center/contain;
+  animation: swing 1s ease-in-out infinite;
+}
+
+@keyframes swing {
+  0% { transform: rotate(-20deg); }
+  50% { transform: rotate(20deg); }
+  100% { transform: rotate(-20deg); }
+}
+
+/* Sparkle effect */
+.sparkles {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,204,255,0.6) 0%, transparent 70%);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0.6; }
+}
+
+/* Loading text animation */
+#loader p {
+  margin-top: 15px;
+  font-size: 18px;
+  letter-spacing: 2px;
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+/* Welcome overlay */
+#welcome {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.6);
+  color: #00ccff;
+  font-size: 28px;
+  font-family: Arial, sans-serif;
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#welcome.show {
+  opacity: 1;
+  animation: fadeInOut 3s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Blur effect only on site content */
+#site-content.blurred {
+  filter: blur(5px);
+  transition: filter 1s ease;
+}
+
+
+</style>
+<script>
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    const welcome = document.getElementById("welcome");
+    const site = document.getElementById("site-content");
+
+    // Hide loader after 3s
+    setTimeout(() => {
+      loader.style.opacity = "0";
+      setTimeout(() => loader.style.display = "none", 800);
+
+      // Blur the site content
+      site.classList.add("blurred");
+
+      // Show welcome text
+      welcome.classList.add("show");
+
+      // Remove blur + welcome after animation
+      setTimeout(() => {
+        site.classList.remove("blurred");
+        welcome.style.display = "none";
+      }, 3000); // matches fadeInOut duration
+    }, 3000); // loader delay
+  });
+</script>
+
+
+</section>
+
+</body>
+</html>

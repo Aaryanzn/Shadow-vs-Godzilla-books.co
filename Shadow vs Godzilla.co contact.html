@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shadow vs Godzilla books.co – Contact</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at var(--spot-x) var(--spot-y), #222 0%, #000 85%);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+
+    :root {
+      --spot-x: 50vw;
+      --spot-y: 50vh;
+    }
+
+
+    .heading h4 {
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      font-size: 1.1rem;
+      overflow: hidden;
+      border-right: 2px solid #4caf50;
+      white-space: nowrap;
+      animation: typing 4s steps(30, end), blink 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+
+    /* NAVBAR */
+   /* NAVBAR CONTAINER */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+  background: rgba(17, 17, 17, 0.8);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* BRAND LOGO */
+.nav-brand h4 {
+  color: #ffcb63;
+  font-size: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* NAV LINKS */
+.nav-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+
+.nav-links a,
+.dropdown-toggle {
+  color: #ccc;
+  text-decoration: none;
+  padding: 10px 15px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active,
+.dropdown-toggle:hover {
+  background: #ef9f00;
+  color: #fff;
+  border-radius: 5px;
+}
+
+/* DROPDOWN MENU */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(34, 34, 34, 0.95);
+  backdrop-filter: blur(8px);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 180px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  display: none;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 12px 15px;
+  color: #ccc;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+
+.dropdown-menu li a:hover {
+  background: #444;
+  color: #fff;
+}
+
+
+    .form-container {
+      margin: 2rem auto;
+      width: 90%;
+      max-width: 400px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      z-index: 3;
+      position: relative;
+    }
+
+    .form-container h2 {
+      text-align: center;
+    }
+
+    .form-container input,
+    .form-container textarea,
+    .form-container button {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      border-radius: 6px;
+      padding: 0.75rem;
+      color: #fff;
+      font-size: 1rem;
+      animation: neonPulse 2.5s infinite alternate;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% {
+        box-shadow: 0 0 5px #4caf50, 0 0 10px #4caf50;
+      }
+      50% {
+        box-shadow: 0 0 10px #81c784, 0 0 20px #81c784;
+      }
+    }
+
+    .form-container input::placeholder,
+    .form-container textarea::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+
+    .form-container button {
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .form-container button:hover {
+      background: #43a047;
+    }
+
+    .feedback {
+      text-align: center;
+      font-size: 0.9rem;
+      min-height: 1.2em;
+    }
+
+    #dust {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .godzilla-shadow {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: url('https://i.imgur.com/3ZQ3Z0U.png') no-repeat center/contain;
+      opacity: 0.05;
+      animation: floatShadow 10s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    @keyframes floatShadow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.7) 100%);
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="dust"></canvas>
+<div class="godzilla-shadow"></div>
+
+<nav>
+  <div class="nav-brand">
+    <h4>Shadow vs Godzilla books.co</h4>
+  </div>
+  <ul class="nav-links">
+    <li><a href="Shadow vs Godzilla books.co.html">Home</a></li>
+    <li><a href="Shadow vs Godzilla.co books.html">Books</a></li>
+    <li><a href="Shadow vs Godzilla.co services.html">Services</a></li>
+    <li><a href="Shadow vs Godzilla.co contact.html" class="active">Contact</a></li>
+    <li class="dropdown">
+      <button class="dropdown-toggle">More ▼</button>
+      <ul class="dropdown-menu">
+        <li><a href="about.html">About</a></li>
+        <li><a href="why-we-started.html">Why We Started</a></li>
+        <li><a href="sneak-peek.html">A Sneak Peek</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+<form
+  class="form-container"
+  action="https://formspree.io/f/mzzjgokj"
+  method="POST"
+>
+  <h2>Contact Us</h2>
+  <input type="hidden" name="_subject" value="New message from books.co"/>
+  <input type="hidden" name="_next" value="Shadow vs Godzilla.co contact.html?success=true"/>
+
+  <input type="text" name="name" placeholder="Your Name" required />
+  <input type="email" name="_replyto" placeholder="Your Email" required />
+  <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+
+  <button type="submit">Send Message</button>
+  <div class="feedback" id="feedback"></div>
+</form>
+
+<script>
+  document.body.addEventListener('mousemove', e => {
+    document.documentElement.style.setProperty('--spot-x', e.clientX + 'px');
+    document.documentElement.style.setProperty('--spot-y', e.clientY + 'px');
+  });
+
+  const dCanvas = document.getElementById('dust');
+  const dCtx = dCanvas.getContext('2d');
+  let dust = [];
+
+  function resizeDust() {
+    dCanvas.width = innerWidth;
+    dCanvas.height = innerHeight;
+  }
+  window.addEventListener('resize', resizeDust);
+  resizeDust();
+
+  class Dust {
+    constructor() {
+      this.x = Math.random() * dCanvas.width;
+      this.y = Math.random() * dCanvas.height;
+      this.size = Math.random() * 2 + 0.5;
+      this.speed = Math.random() * 0.5 + 0.2;
+      this.alpha = Math.random() * 0.5 + 0.1;
+    }
+    update() {
+      this.x += this.speed;
+      if (this.x > dCanvas.width) this.x = 0;
+    }
+    draw() {
+      dCtx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+      dCtx.beginPath();
+      dCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      dCtx.fill();
+    }
+  }
+
+  for (let i = 0; i < 150; i++) dust.push(new Dust());
+  (function animateDust() {
+    dCtx.clearRect(0, 0, dCanvas.width, dCanvas.height);
+    dust.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animateDust);
+  })();
+
+  const params = new URLSearchParams(location.search);
+  if (params.get('success') === 'true') {
+    document.getElementById('feedback').textContent =
+      '🎉 Thanks for reaching out! We’ll be in touch soon.';
+  }
+
+  const form = document.querySelector('.form-container');
+  const feedback = document.getElementById('feedback');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    feedback.textContent = 'Sending…';
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(res => {
+      if (res.ok) {
+        feedback.textContent = 'Message sent! Thank you.';
+      
+                form.reset();
+      } else {
+        return res.json().then(data => {
+          throw new Error(data.error || 'Submission failed');
+        });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      feedback.textContent = 'Oops—please try again later.';
+    });
+  });
+</script>
+<script>
+  const dropdown = document.querySelector('.dropdown');
+  const toggle = dropdown.querySelector('.dropdown-toggle');
+  const menu = dropdown.querySelector('.dropdown-menu');
+
+  toggle.addEventListener('click', e => {
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+
+  document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove('open');
+    }
+  });
+</script>
+
+</body>
+</html>

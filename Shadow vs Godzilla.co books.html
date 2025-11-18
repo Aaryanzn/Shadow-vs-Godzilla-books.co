@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shadow vs Godzilla books.co – Books</title>
+  <style>
+    :root {
+      --spot-x: 50vw;
+      --spot-y: 50vh;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at var(--spot-x) var(--spot-y), #333 0%, #000 80%);
+      font-family: Calibri, sans-serif;
+      color: #fff;
+      overflow-y: auto;
+      position: relative;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.2) rgba(255,255,255,0.05);
+    }
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05);
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(255,255,255,0.2);
+      border-radius: 6px;
+      border: 3px solid transparent;
+      background-clip: content-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(255,255,255,0.3);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.7) 100%);
+      z-index: 2;
+    }
+
+    #orbs {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* NAVBAR */
+    nav {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:20px 50px;
+      background:#111;
+      position: relative;
+      z-index: 10;
+    }
+    .nav-brand h4 {
+      color:#ffcb63;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      font-size:20px;
+    }
+    .nav-links {
+      display:flex;
+      gap:20px;
+      list-style:none;
+    }
+    .nav-links a,
+    .dropdown-toggle {
+      color:#ccc;
+      text-decoration:none;
+      padding:10px 15px;
+      background:none;
+      border:none;
+      font-weight:bold;
+      cursor:pointer;
+      transition:background 0.3s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active,
+    .dropdown-toggle:hover {
+      background:#ef9f00;
+      color:#fff;
+    }
+    .dropdown {
+  position: relative;
+}
+.dropdown-toggle {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-weight: bold;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.dropdown-toggle:hover {
+  background: #ef9f00;
+  color: #fff;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #222;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 180px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  display: none;
+  z-index: 10;
+}
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+.dropdown-menu li a {
+  display: block;
+  padding: 10px 15px;
+  color: #ccc;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+.dropdown-menu li a:hover {
+  background: #444;
+  color: #fff;
+}
+
+    .book-section {
+      padding-top: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+    }
+    .book-section .container {
+      width: 800px;
+      max-width: 90vw;
+      height: 600px;
+      perspective: 1200px;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .right {
+      position: absolute;
+      top: 0; right: 0;
+      width: 50%; height: 100%;
+      transform-origin: left;
+      transform-style: preserve-3d;
+      transition: transform .7s ease-in-out;
+      border-radius: 10px 0 0 10px;
+    }
+    .right figure.front,
+    .right figure.back {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      background-size: cover;
+      background-position: center;
+      backface-visibility: hidden;
+      overflow: hidden;
+      border-radius: inherit;
+    }
+    .right figure.back {
+      transform: rotateY(180deg);
+      box-shadow: -2px 2px 15px -2px rgba(0,0,0,0.2);
+    }
+    .right figure.front {
+      box-shadow: 2px 2px 15px -2px rgba(0,0,0,0.2);
+    }
+    .right.flip {
+      transform: rotateY(-180deg);
+    }
+    .right.flip::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.1);
+      border-radius: 0 10px 10px 0;
+      z-index: 5;
+    }
+
+    .flipper-controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .book-section button {
+      border: 2px solid #ef9f00;
+      background: transparent;
+      color: #ef9f00;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background .3s;
+    }
+    .book-section button:hover {
+      background: #ef9f00;
+      color: #000;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 3;
+    }
+    .pagination button {
+      background: #ef9f00;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: .5rem 1rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .pagination button:disabled {
+      background: #555;
+      cursor: default;
+    }
+    #page-numbers {
+      list-style: none;
+      display: flex;
+      gap: .5rem;
+      margin: 0;
+      padding: 0;
+    }
+    #page-numbers li {
+      width: 2rem;
+      height: 2rem;
+      line-height: 2rem;
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    #page-numbers li.active {
+      background: #ef9f00;
+      color: #000;
+    }
+    #page-numbers li:hover:not(.active) {
+      background: rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="orbs"></canvas>
+
+<nav>
+  <div class="nav-brand"><h4>Shadow vs Godzilla</h4></div>
+  <ul class="nav-links">
+    <li><a href="Shadow vs Godzilla books.co.html">Home</a></li>
+    <li><a href="Shadow vs Godzilla.co books.html" class="active">Books</a></li>
+    <li><a href="Shadow vs Godzilla.co services.html">Services</a></li>
+    <li><a href="Shadow vs Godzilla.co contact.html">Contact</a></li>
+    <li class="dropdown">
+      <button class="dropdown-toggle">More ▼</button>
+      <ul class="dropdown-menu">
+        <li><a href="about.html">About</a></li>
+        <li><a href="why-we-started.html">Why We Started</a></li>
+        <li><a href="sneak-peek.html">A Sneak Peek</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<section class="book-section">
+  <div class="container">
+    <div class="right">
+      <figure class="back" style="background-image:url('HD-wallpaper-dark-full-moon-black-cloud-full-moon-night.jpg')"></figure>
+      <figure class="front" style="background-image:url('Giant\ fat\ liar\ cover\ page.png')"></figure>
+    </div>
+    <div class="right">
+      <figure class="back" style="background-image:url('the dark lion book cover.png')"></figure>
+      <figure class="front" style="background-image:url('cool-moon-3riuyj0aimexfsci.jpg')"></figure>
+    </div>
+  </div>
+
+
+
+
+
+<!-- Add this block below -->
+
+<div class="flipper-controls">
+  <button id="flip-left">← Flip Back</button>
+  <button id="flip-right">Flip Forward →</button>
+</div>
+
+
+
+</section>
+
+<script>
+  // Spotlight effect
+  document.body.addEventListener('mousemove', e => {
+    document.documentElement.style.setProperty('--spot-x', e.clientX + 'px');
+    document.documentElement.style.setProperty('--spot-y', e.clientY + 'px');
+  });
+
+  // Glowing orb animation
+  const canvas = document.getElementById('orbs');
+  const ctx = canvas.getContext('2d');
+  let orbs = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  class Orb {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.radius = Math.random() * 20 + 10;
+      this.alpha = Math.random() * 0.3 + 0.1;
+      this.dx = (Math.random() - 0.5) * 0.5;
+      this.dy = (Math.random() - 0.5) * 0.5;
+    }
+    update() {
+      this.x += this.dx;
+      this.y += this.dy;
+      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(100, 255, 150, ${this.alpha})`;
+      ctx.shadowColor = '#64f808';
+      ctx.shadowBlur = 10;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 80; i++) orbs.push(new Orb());
+  function animateOrbs() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    orbs.forEach(o => { o.update(); o.draw(); });
+    requestAnimationFrame(animateOrbs);
+  }
+  animateOrbs();
+
+  // Book flipper with auto-pagination
+  const cards = Array.from(document.querySelectorAll('.right'));
+  const perPage = 2;
+  const totalPages = Math.ceil(cards.length / perPage);
+  let currentPage = 1;
+  let z = 1;
+  let flipIndex = 0;
+
+  const flipLeftBtn = document.getElementById('flip-left');
+  const flipRightBtn = document.getElementById('flip-right');
+
+  function showPage(page) {
+    currentPage = page;
+    cards.forEach((card, idx) => {
+      const start = (page - 1) * perPage;
+      const end = page * perPage;
+      card.style.display = (idx >= start && idx < end) ? 'block' : 'none';
+      card.classList.remove('flip');
+      card.style.zIndex = 'auto';
+    });
+    flipIndex = perPage - 1;
+  }
+
+  function flipForward() {
+    const visible = cards.filter(el => el.style.display !== 'none');
+    if (flipIndex >= 0) {
+      visible[flipIndex].classList.add('flip');
+      visible[flipIndex].style.zIndex = ++z;
+      flipIndex--;
+    } else if (currentPage < totalPages) {
+      showPage(currentPage + 1);
+    }
+  }
+
+  function flipBack() {
+    const visible = cards.filter(el => el.style.display !== 'none');
+    if (flipIndex < perPage - 1) {
+      flipIndex++;
+      visible[flipIndex].classList.remove('flip');
+      setTimeout(() => {
+        visible[flipIndex].style.zIndex = 'auto';
+      }, 350);
+    } else if (currentPage > 1) {
+      showPage(currentPage - 1);
+    }
+  }
+
+  flipRightBtn.addEventListener('click', flipForward);
+  flipLeftBtn.addEventListener('click', flipBack);
+
+  showPage(1);
+</script>
+<script>
+  const dropdown = document.querySelector('.dropdown');
+  const toggle = dropdown.querySelector('.dropdown-toggle');
+  const menu = dropdown.querySelector('.dropdown-menu');
+
+  toggle.addEventListener('click', e => {
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+
+  document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove('open');
+    }
+  });
+</script>
+</body>
+</html>
+
